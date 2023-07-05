@@ -27,7 +27,7 @@ class AddressManager(models.Manager):
 
 class Address(BaseModel):
     """地址模型类"""
-    user = models.ForeignKey("User", verbose_name="所属用户")
+    user = models.ForeignKey("User", verbose_name="所属用户", on_delete=models.CASCADE)
     receiver = models.CharField(verbose_name="收件人", max_length=32)
     addr = models.CharField(verbose_name="收件地址", max_length=256)
     zip_code = models.CharField(verbose_name="邮政编码", max_length=6, blank=True)
