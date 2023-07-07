@@ -5,7 +5,7 @@ from common.base_model import BaseModel
 # Create your models here.
 
 
-class OrderInfo(models.Model):
+class OrderInfo(BaseModel):
     """订单模型类"""
 
     PAY_METHODS = {
@@ -39,14 +39,26 @@ class OrderInfo(models.Model):
     )
 
     order_id = models.CharField(verbose_name="订单id", max_length=128)
-    user = models.ForeignKey("app_user.User", verbose_name="用户", on_delete=models.PROTECT)
-    addr = models.ForeignKey("app_user.Address", verbose_name="地址", on_delete=models.PROTECT)
-    pay_method = models.SmallIntegerField(verbose_name='支付方式', default=3, choices=PAY_METHODS_CHOICES)
-    total_count = models.IntegerField(verbose_name='商品数量', default=1)
-    total_price = models.DecimalField(verbose_name='商品总价', max_digits=10, decimal_places=2)
-    transit_price = models.DecimalField(verbose_name='订单运费', max_digits=10, decimal_places=2)
-    status = models.SmallIntegerField(verbose_name='订单状态', choices=ORDER_STATUS_CHOICES, default=1)
-    trade_no = models.CharField(verbose_name='支付编号', max_length=128, default='')
+    user = models.ForeignKey(
+        "app_user.User", verbose_name="用户", on_delete=models.PROTECT
+    )
+    addr = models.ForeignKey(
+        "app_user.Address", verbose_name="地址", on_delete=models.PROTECT
+    )
+    pay_method = models.SmallIntegerField(
+        verbose_name="支付方式", default=3, choices=PAY_METHODS_CHOICES
+    )
+    total_count = models.IntegerField(verbose_name="商品数量", default=1)
+    total_price = models.DecimalField(
+        verbose_name="商品总价", max_digits=10, decimal_places=2
+    )
+    transit_price = models.DecimalField(
+        verbose_name="订单运费", max_digits=10, decimal_places=2
+    )
+    status = models.SmallIntegerField(
+        verbose_name="订单状态", choices=ORDER_STATUS_CHOICES, default=1
+    )
+    trade_no = models.CharField(verbose_name="支付编号", max_length=128, default="")
     comment = models.CharField(verbose_name="订单备注", max_length=128, default="")
 
     class Meta:  # pylint: disable=C0115
@@ -59,14 +71,16 @@ class OrderInfo(models.Model):
         return "%s-%s" % (self.order_id, self.get_status_display())
 
 
-class OrderGoods(models.Model):
+class OrderGoods(BaseModel):
     """订单商品模型类"""
 
     order = models.ForeignKey("OrderInfo", verbose_name="订单", on_delete=models.CASCADE)
-    sku = models.ForeignKey("app_goods.GoodsSKU", verbose_name='商品SKU', on_delete=models.PROTECT)
-    count = models.IntegerField(verbose_name='商品数目', default=1)
-    price = models.DecimalField(verbose_name='商品价格', max_digits=10, decimal_places=2)
-    comment = models.CharField(verbose_name='商品评论', max_length=256, default="")
+    sku = models.ForeignKey(
+        "app_goods.GoodsSKU", verbose_name="商品SKU", on_delete=models.PROTECT
+    )
+    count = models.IntegerField(verbose_name="商品数目", default=1)
+    price = models.DecimalField(verbose_name="商品价格", max_digits=10, decimal_places=2)
+    comment = models.CharField(verbose_name="商品评论", max_length=256, default="")
 
     class Meta:  # pylint: disable=C0115
         db_table = "tb_order_goods"

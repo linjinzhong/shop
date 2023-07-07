@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from common.base_model import BaseModel
+
 # Create your models here.
 
 
@@ -15,11 +16,11 @@ class User(AbstractUser, BaseModel):
 
 class AddressManager(models.Manager):
     """地址模型管理器类"""
-    
+
     def get_default_address(self, user):
         """获取用户默认的收货地址"""
         try:
-            address = self.model.objects.get(user=user, is_default=True)
+            address = self.get(user=user, is_default=True)
         except self.model.DoesNotExist:
             address = None
         return address
@@ -27,6 +28,7 @@ class AddressManager(models.Manager):
 
 class Address(BaseModel):
     """地址模型类"""
+
     user = models.ForeignKey("User", verbose_name="所属用户", on_delete=models.CASCADE)
     receiver = models.CharField(verbose_name="收件人", max_length=32)
     addr = models.CharField(verbose_name="收件地址", max_length=256)

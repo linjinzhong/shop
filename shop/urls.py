@@ -21,11 +21,11 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path('tinymce/', include('tinymce.urls')),  # 富文本编辑器
-    path("user/", include("app_user.urls"), name="user"),  # 用户模块
-    path("cart/", include("app_cart.urls"), name="cart"),  # 购物车模块
-    path("order/", include("app_order.urls"), name="order"),  # 订单模块
-    path("", include("app_goods.urls"), name="goods"),  # 商品模块
+    path("tinymce/", include("tinymce.urls")),  # 富文本编辑器
+    path("user/", include("app_user.urls", namespace="user")),  # 用户模块
+    path("cart/", include("app_cart.urls", namespace="cart")),  # 购物车模块
+    path("order/", include("app_order.urls", namespace="order")),  # 订单模块
+    path("", include("app_goods.urls", namespace="goods")),  # 商品模块
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
