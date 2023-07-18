@@ -1,0 +1,54 @@
+/root/shop/venv/lib64/python3.9/site-packages/celery/platforms.py:829: SecurityWarning: You're running the worker with superuser privileges: this is
+absolutely not recommended!
+
+Please specify a different user using the --uid option.
+
+User information: uid=0 euid=0 gid=0 egid=0
+
+  warnings.warn(SecurityWarning(ROOT_DISCOURAGED.format(
+[2023-07-18 18:51:20,486: WARNING/MainProcess] /root/shop/venv/lib64/python3.9/site-packages/celery/worker/consumer/consumer.py:498: CPendingDeprecationWarning: The broker_connection_retry configuration setting will no longer determine
+whether broker connection retries are made during startup in Celery 6.0 and above.
+If you wish to retain the existing behavior for retrying connections on startup,
+you should set broker_connection_retry_on_startup to True.
+  warnings.warn(
+
+[2023-07-18 18:51:20,526: INFO/MainProcess] Connected to redis://127.0.0.1:6379/11
+[2023-07-18 18:51:20,527: WARNING/MainProcess] /root/shop/venv/lib64/python3.9/site-packages/celery/worker/consumer/consumer.py:498: CPendingDeprecationWarning: The broker_connection_retry configuration setting will no longer determine
+whether broker connection retries are made during startup in Celery 6.0 and above.
+If you wish to retain the existing behavior for retrying connections on startup,
+you should set broker_connection_retry_on_startup to True.
+  warnings.warn(
+
+[2023-07-18 18:51:20,528: INFO/MainProcess] mingle: searching for neighbors
+[2023-07-18 18:51:21,545: INFO/MainProcess] mingle: all alone
+[2023-07-18 18:51:21,552: INFO/MainProcess] celery@VM-12-13-opencloudos ready.
+[2023-07-18 18:54:47,747: INFO/MainProcess] Task celery_tasks.tasks.send_register_active_email[e57ed97f-ca3c-440d-86cc-86e72df12765] received
+[2023-07-18 18:54:48,347: INFO/ForkPoolWorker-2] Task celery_tasks.tasks.send_register_active_email[e57ed97f-ca3c-440d-86cc-86e72df12765] succeeded in 0.5977986179932486s: None
+
+worker: Warm shutdown (MainProcess)
+/root/shop/venv/lib64/python3.9/site-packages/celery/platforms.py:829: SecurityWarning: You're running the worker with superuser privileges: this is
+absolutely not recommended!
+
+Please specify a different user using the --uid option.
+
+User information: uid=0 euid=0 gid=0 egid=0
+
+  warnings.warn(SecurityWarning(ROOT_DISCOURAGED.format(
+[2023-07-18 19:02:00,262: WARNING/MainProcess] /root/shop/venv/lib64/python3.9/site-packages/celery/worker/consumer/consumer.py:498: CPendingDeprecationWarning: The broker_connection_retry configuration setting will no longer determine
+whether broker connection retries are made during startup in Celery 6.0 and above.
+If you wish to retain the existing behavior for retrying connections on startup,
+you should set broker_connection_retry_on_startup to True.
+  warnings.warn(
+
+[2023-07-18 19:02:00,300: INFO/MainProcess] Connected to redis://127.0.0.1:6379/11
+[2023-07-18 19:02:00,300: WARNING/MainProcess] /root/shop/venv/lib64/python3.9/site-packages/celery/worker/consumer/consumer.py:498: CPendingDeprecationWarning: The broker_connection_retry configuration setting will no longer determine
+whether broker connection retries are made during startup in Celery 6.0 and above.
+If you wish to retain the existing behavior for retrying connections on startup,
+you should set broker_connection_retry_on_startup to True.
+  warnings.warn(
+
+[2023-07-18 19:02:00,308: INFO/MainProcess] mingle: searching for neighbors
+[2023-07-18 19:02:01,322: INFO/MainProcess] mingle: all alone
+[2023-07-18 19:02:01,328: INFO/MainProcess] celery@VM-12-13-opencloudos ready.
+[2023-07-18 19:02:49,767: INFO/MainProcess] Task celery_tasks.tasks.send_register_active_email[dc19ae81-eba1-4971-a44e-f68fc65e9b6b] received
+[2023-07-18 19:02:50,299: INFO/ForkPoolWorker-2] Task celery_tasks.tasks.send_register_active_email[dc19ae81-eba1-4971-a44e-f68fc65e9b6b] succeeded in 0.5293302339996444s: None

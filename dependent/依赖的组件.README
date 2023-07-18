@@ -1,0 +1,5 @@
+1. redis
+    ./redis-server /root/shop/dependent/redis.conf
+
+2. nginx
+    nginx -c /root/shop/dependent/nginx.conf

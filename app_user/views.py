@@ -149,7 +149,6 @@ class LoginView(View):
 
         # 登录校验
         user = authenticate(username=username, password=password)
-        print(user)
         if user is not None:  # 用户名和密码正确
             if user.is_active:  # 已激活
                 # 记录用户登录状态
@@ -158,7 +157,7 @@ class LoginView(View):
                 # 获取登录后所要跳转到的地址
                 # 默认跳转到首页
                 # next_url = request.GET.get("next", reverse("goods:index"))
-                next_url = request.GET.get("next", reverse("user:address"))
+                next_url = request.GET.get("next", reverse("user:user"))
 
                 # 跳转到首页
                 response = redirect(next_url)
@@ -200,7 +199,7 @@ class UserInfoView(LoginRequiredMixin, View):
         # page='user'
         # 如果用户未登录->AnonymousUser类的一个实例
         # 如果用户登录->User类的一个实例
-        # request.user.is_authenticated()
+        # request.user.is_authenticated
         # 除了你给模板文件传递的模板变量之外，django框架会把request.user也传给模板文件
 
         # 获取用户的个人信息
@@ -208,7 +207,7 @@ class UserInfoView(LoginRequiredMixin, View):
         address = Address.objects.get_default_address(user)
 
         # 获取用户的历史记录
-        conn = get_redis_connection("default")
+        conn = get_redis_connection("history")
 
         history_key = "history_%d" % user.id
 
@@ -222,7 +221,7 @@ class UserInfoView(LoginRequiredMixin, View):
         goods_list = []
         for sku_id in sku_ids:
             for goods in goods_li:
-                if sku_id == goods.id:
+                if int(sku_id) == goods.id:
                     goods_list.append(goods)
 
         # 组织上下文
@@ -250,19 +249,18 @@ class UserOrderView(LoginRequiredMixin, View):
         for order in orders:
             # 根据order_id查询订单商品信息
             order_skus = OrderGoods.objects.filter(order_id=order.order_id)
-
             # 便利order_skus计算商品的小计
             for order_sku in order_skus:
                 # 计算小计
                 amount = order_sku.count * order_sku.price
                 # 动态给order_sku增加属性amount，保存订单商品的小计
                 order_sku.amount = amount
-            order.status_name = OrderInfo.ORDER_STATUS[order.order_status]
+            order.status_name = OrderInfo.ORDER_STATUS[order.status]
             # 动态给order增加属性，保存订单商品的信息
             order.order_skus = order_skus
 
         # 分页
-        paginator = Paginator(orders, 1)
+        paginator = Paginator(orders, 3)
 
         # 获取第page页的内容
         try:

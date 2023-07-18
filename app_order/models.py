@@ -38,7 +38,7 @@ class OrderInfo(BaseModel):
         (5, "已完成"),
     )
 
-    order_id = models.CharField(verbose_name="订单id", max_length=128)
+    order_id = models.CharField(verbose_name="订单id", primary_key=True, max_length=128)
     user = models.ForeignKey(
         "app_user.User", verbose_name="用户", on_delete=models.PROTECT
     )
@@ -59,7 +59,9 @@ class OrderInfo(BaseModel):
         verbose_name="订单状态", choices=ORDER_STATUS_CHOICES, default=1
     )
     trade_no = models.CharField(verbose_name="支付编号", max_length=128, default="")
-    comment = models.CharField(verbose_name="订单备注", max_length=128, default="")
+    comment = models.CharField(
+        verbose_name="订单备注", max_length=128, default="", blank=True
+    )
 
     class Meta:  # pylint: disable=C0115
         db_table = "tb_order_info"
@@ -80,7 +82,9 @@ class OrderGoods(BaseModel):
     )
     count = models.IntegerField(verbose_name="商品数目", default=1)
     price = models.DecimalField(verbose_name="商品价格", max_digits=10, decimal_places=2)
-    comment = models.CharField(verbose_name="商品评论", max_length=256, default="")
+    comment = models.CharField(
+        verbose_name="商品评论", max_length=256, default="", blank=True
+    )
 
     class Meta:  # pylint: disable=C0115
         db_table = "tb_order_goods"

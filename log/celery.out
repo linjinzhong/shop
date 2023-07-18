@@ -1,0 +1,40 @@
+ 
+ -------------- celery@VM-12-13-opencloudos v5.3.1 (emerald-rush)
+--- ***** ----- 
+-- ******* ---- Linux-5.4.119-20.0009.20-x86_64-with-glibc2.28 2023-07-18 18:51:19
+- *** --- * --- 
+- ** ---------- [config]
+- ** ---------- .> app:         celery_tasks.tasks:0x7f6325c18670
+- ** ---------- .> transport:   redis://127.0.0.1:6379/11
+- ** ---------- .> results:     disabled://
+- *** --- * --- .> concurrency: 2 (prefork)
+-- ******* ---- .> task events: OFF (enable -E to monitor tasks in this worker)
+--- ***** ----- 
+ -------------- [queues]
+                .> celery           exchange=celery(direct) key=celery
+                
+
+[tasks]
+  . celery_tasks.tasks.generate_static_index_html
+  . celery_tasks.tasks.send_register_active_email
+
+ 
+ -------------- celery@VM-12-13-opencloudos v5.3.1 (emerald-rush)
+--- ***** ----- 
+-- ******* ---- Linux-5.4.119-20.0009.20-x86_64-with-glibc2.28 2023-07-18 19:01:59
+- *** --- * --- 
+- ** ---------- [config]
+- ** ---------- .> app:         celery_tasks.tasks:0x7f0bb8382730
+- ** ---------- .> transport:   redis://127.0.0.1:6379/11
+- ** ---------- .> results:     disabled://
+- *** --- * --- .> concurrency: 2 (prefork)
+-- ******* ---- .> task events: OFF (enable -E to monitor tasks in this worker)
+--- ***** ----- 
+ -------------- [queues]
+                .> celery           exchange=celery(direct) key=celery
+                
+
+[tasks]
+  . celery_tasks.tasks.generate_static_index_html
+  . celery_tasks.tasks.send_register_active_email
+
