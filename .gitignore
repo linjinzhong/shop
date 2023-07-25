@@ -161,3 +161,4 @@ cython_debug/
 #
 # 自定义
 shop/settings.py
+log/
