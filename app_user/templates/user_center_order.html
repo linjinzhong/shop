@@ -27,7 +27,7 @@
 					</td>
 					<td width="15%">{{ order.total_price|add:order.transit_price }}(含运费:{{ order.transit_price }})元</td>
 					<td width="15%">{{ order.status_name }}</td>
-					<td width="15%"><a href="#" order_id="{{ order.order_id }}" status="{{ order.status }}" class="oper_btn">去付款</a></td>
+					<td width="15%"><a href="#" order_id="{{ order.order_id }}" status="{{ order.status }}" is_superuser="{{ user.is_superuser }}" class="oper_btn"></a></td>
 				</tr>
 			</tbody>
 		</table>
@@ -63,11 +63,16 @@
 		$('.oper_btn').each(function () {
         // 获取支付状态
         status = $(this).attr('status')
+		is_superuser = $(this).attr('is_superuser')
         if (status == 1){
             $(this).text('去支付')
         }
 		else if (status == 2){
-            $(this).hide()
+			if (is_superuser == 'True') {
+				$(this).text("取消订单-退款")
+			} else {
+            	$(this).hide()
+			}
 		}
 		else if (status == 3){
             $(this).text("去确认收货")
@@ -75,7 +80,8 @@
         else if (status == 4){
             $(this).text('去评价')
         }
-        else if (status == 5){
+        else { 
+			// 5(已完成)、6(已取消)、7(已退款)
             $(this).hide()
         }
     	})
@@ -109,6 +115,20 @@
 							alert(data.errmsg)
 						}
 				})
+			}
+			else if (status == 2){
+				// 待发货-取消订单-自动退款
+				csrf = $('input[name="csrfmiddlewaretoken"]').val()
+				params = {'order_id': order_id, 'csrfmiddlewaretoken': csrf}
+				$.post('/order/refund/', params, function(data){
+								if (data.res == 0) {
+									alert('退款成功')
+									location.reload()
+								}
+								else {
+								    alert(data.errmsg)
+								}
+							})
 			}
 			else if (status == 3){
 				// 确认收货

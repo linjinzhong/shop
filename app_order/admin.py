@@ -1,11 +1,15 @@
 from collections import OrderedDict
 from django.utils.text import capfirst
 from django.contrib import admin
+from django.contrib import messages
+from django.http import HttpResponseRedirect
 from django.core.cache import cache
 from app_order.models import (
     OrderGoods,
     OrderInfo,
 )
+from common.pay_class import AliPayClass
+
 
 # Register your models here.
 
@@ -41,7 +45,7 @@ class OrderInfoAdmin(admin.ModelAdmin):
     ordering = ("create_time",)
 
     # 可编辑字段
-    list_editable = ["status"]
+    list_editable = []
 
     # 可展示链接
     list_display_links = ["order_id"]
@@ -63,6 +67,25 @@ class OrderInfoAdmin(admin.ModelAdmin):
     inlines = [
         InlineOrderGoods,
     ]
+
+    def save_model(self, request, obj, form, change):
+        """新增或更新表中的数据时调用 方法重写多态"""
+
+        if change and "status" in form.changed_data and obj.status == 7:
+            order_id = obj.order_id
+            refund_amount = float(obj.total_price + obj.transit_price)
+
+            class_alipay = AliPayClass()
+            response = class_alipay.refund(order_id, refund_amount)
+            code = response.get("code")
+            if code == "10000" and response.get("fund_change") == "Y":
+                # 退款成功
+                obj.status = 7  # 已退款
+            else:  # 退款出错
+                messages.set_level(request, messages.ERROR)
+                messages.error(request, "订单-%s，退款出错" % order_id)
+                return
+        super().save_model(request, obj, form, change)
 
 
 class OrderGoodsAdmin(admin.ModelAdmin):

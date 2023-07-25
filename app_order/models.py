@@ -28,6 +28,8 @@ class OrderInfo(BaseModel):
         3: "待收货",
         4: "待评价",
         5: "已完成",
+        6: "已取消",
+        7: "已退款",
     }
 
     ORDER_STATUS_CHOICES = (
@@ -36,6 +38,8 @@ class OrderInfo(BaseModel):
         (3, "待收货"),
         (4, "待评价"),
         (5, "已完成"),
+        (6, "已取消"),
+        (7, "已退款"),
     )
 
     order_id = models.CharField(verbose_name="订单id", primary_key=True, max_length=128)

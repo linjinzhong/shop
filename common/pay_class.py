@@ -10,7 +10,7 @@ from alipay.aop.api.FileItem import FileItem
 from alipay.aop.api.domain.AlipayTradeAppPayModel import AlipayTradeAppPayModel
 from alipay.aop.api.domain.AlipayTradePagePayModel import AlipayTradePagePayModel
 from alipay.aop.api.domain.AlipayTradeQueryModel import AlipayTradeQueryModel
-from alipay.aop.api.domain.AlipayTradePayModel import AlipayTradePayModel
+from alipay.aop.api.domain.AlipayTradeRefundModel import AlipayTradeRefundModel
 from alipay.aop.api.domain.GoodsDetail import GoodsDetail
 from alipay.aop.api.domain.SettleDetailInfo import SettleDetailInfo
 from alipay.aop.api.domain.SettleInfo import SettleInfo
@@ -21,7 +21,7 @@ from alipay.aop.api.request.AlipayOfflineMaterialImageUploadRequest import (
 from alipay.aop.api.request.AlipayTradeAppPayRequest import AlipayTradeAppPayRequest
 from alipay.aop.api.request.AlipayTradePagePayRequest import AlipayTradePagePayRequest
 from alipay.aop.api.request.AlipayTradeQueryRequest import AlipayTradeQueryRequest
-from alipay.aop.api.request.AlipayTradePayRequest import AlipayTradePayRequest
+from alipay.aop.api.request.AlipayTradeRefundRequest import AlipayTradeRefundRequest
 from alipay.aop.api.response.AlipayOfflineMaterialImageUploadResponse import (
     AlipayOfflineMaterialImageUploadResponse,
 )
@@ -105,5 +105,23 @@ class AliPayClass(object):
         response = json.loads(response)
         LOGGER.info(
             "======|alipay.trade.query response:%s|order_id:%s|", response, order_id
+        )
+        return response
+
+    def refund(self, order_id, refund_amount, refund_reason="正常退款"):
+        """
+        alipay.trade.refund(统一收单交易退款接口)
+        https://opendocs.alipay.com/open/f60979b3_alipay.trade.refund?pathHash=e4c921a7&ref=api
+        """
+        model = AlipayTradeRefundModel()
+        model.out_trade_no = order_id
+        model.refund_amount = refund_amount
+        model.refund_reason = refund_reason
+        request = AlipayTradeRefundRequest(biz_model=model)
+
+        response = self.client.execute(request)
+        response = json.loads(response)
+        LOGGER.info(
+            "======|alipay.trade.refund response:%s|order_id:%s|", response, order_id
         )
         return response

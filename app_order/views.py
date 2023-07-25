@@ -355,6 +355,106 @@ class CheckPayView(View):
 
 # ajax　post
 # 前端传递的参数： 订单id(order_id)
+# /order/refund/
+class OrderRefundView(View):
+    """退款"""
+
+    def post(self, request):
+        """取消订单-退款"""
+
+        # 用户是否登录
+        user = request.user
+        if not user.is_authenticated:
+            return JsonResponse({"res": 1, "errmsg": "用户未登录"})
+
+        # 接收参数
+        order_id = request.POST.get("order_id")
+
+        # 校验参数
+        if not order_id:
+            return JsonResponse({"res": 2, "errmsg": "无效的订单id"})
+
+        try:
+            order = OrderInfo.objects.get(
+                order_id=order_id, user=user, pay_method=3, status=2
+            )
+        except OrderInfo.DoesNotExist:
+            return JsonResponse({"res": 3, "errmsg": "订单不存在"})
+
+        refund_amount = float(order.total_price + order.transit_price)
+
+        # 调用支付宝交易查询接口
+        while True:
+            """
+            {
+                "alipay_trade_refund_response": {
+                    "code": "10000",
+                    "msg": "Success",
+                    "trade_no": "支付宝交易号",
+                    "out_trade_no": "6823789339978248",
+                    "buyer_logon_id": "159****5620",
+                    "fund_change": "Y",
+                    "refund_fee": 88.88,
+                    "refund_detail_item_list": [
+                        {
+                            "fund_channel": "ALIPAYACCOUNT",
+                            "amount": 10,
+                            "real_amount": 11.21,
+                            "fund_type": "DEBIT_CARD"
+                        }
+                    ],
+                    "store_name": "望湘园联洋店",
+                    "buyer_user_id": "2088101117955611",
+                    "send_back_fee": "1.8",
+                    "refund_hyb_amount": "10.24",
+                    "refund_charge_info_list": [
+                        {
+                            "refund_charge_fee": 0.01,
+                            "switch_fee_rate": "0.01",
+                            "charge_type": "trade",
+                            "refund_sub_fee_detail_list": [
+                                {
+                                    "refund_charge_fee": 0.1,
+                                    "switch_fee_rate": "0.01"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "sign": "ERITJKEIJKJHKKKKKKKHJEREEEEEEEEEEE"
+            }
+            """
+            class_alipay = AliPayClass()
+            response = class_alipay.refund(order_id, refund_amount)
+            LOGGER.info(
+                "======|退款|order_id=%s|refund_amount=%s|response=%s|",
+                order_id,
+                refund_amount,
+                response,
+            )
+
+            code = response.get("code")
+
+            if code == "10000" and response.get("fund_change") == "Y":
+                # 退款成功
+                LOGGER.info("======|退款成功|order_id=%s|", order_id)
+                order.status = 7  # 已退款
+                order.save()
+                return JsonResponse({"res": 0, "message": "退款成功"})
+            elif code == "20000":
+                # 服务不可用，稍后重试
+                LOGGER.info("======|退款受阻，开始休眠5秒|order_id=%s|", order_id)
+                time.sleep(5)
+                continue
+            else:  # 退款出错
+                LOGGER.info("======|退款出错|order_id=%s|", order_id)
+                return JsonResponse(
+                    {"res": 4, "errmsg": "退款失败:%s" % response.get("sub_msg")}
+                )
+
+
+# ajax　post
+# 前端传递的参数： 订单id(order_id)
 # /order/confirm/
 class OrderConfirmView(View):
     """确认收货"""

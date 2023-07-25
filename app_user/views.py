@@ -226,7 +226,7 @@ class UserInfoView(LoginRequiredMixin, View):
 
         # 组织上下文
         context = {
-            "page": "user",
+            # "page": "user",
             "address": address,
             "goods_list": goods_list,
         }

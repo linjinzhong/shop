@@ -9,6 +9,7 @@ urlpatterns = [
     path("commit/", views.OrderCommitView.as_view(), name="commit"),  # 提交创建订单
     path("pay/", views.OrderPayView.as_view(), name="pay"),  # 订单支付
     path("check/", views.CheckPayView.as_view(), name="check"),  # 查询支付订单结果
+    path("refund/", views.OrderRefundView.as_view(), name="refund"),  # 退款
     path("confirm/", views.OrderConfirmView.as_view(), name="confirm"),  # 确认收货
     path(
         "comment/<int:order_id>/", views.CommentView.as_view(), name="comment"
